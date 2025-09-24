@@ -1,21 +1,15 @@
-package com.habibi.taskmanager.task
+package com.habibi.taskmanager.ui.task
 
 import com.habibi.taskmanager.data.entities.Category
 import com.habibi.taskmanager.data.entities.Task
 import com.habibi.taskmanager.data.entities.TaskStatus
 import com.habibi.taskmanager.data.repository.CategoriesRepository
 import com.habibi.taskmanager.data.repository.TasksRepository
-import com.habibi.taskmanager.ui.task.TasksDetails
-import com.habibi.taskmanager.ui.task.TasksViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -26,7 +20,6 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.mockito.kotlin.capture
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
