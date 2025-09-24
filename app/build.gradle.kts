@@ -74,13 +74,20 @@ dependencies {
     androidTestImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
 
-    // Mockito lets you create "fake" versions of your classes (like your DAO)
-    // We use mockito-kotlin for better Kotlin syntax.
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
-    // This is often needed to mock final classes, which Kotlin classes are by default.
     testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
     testImplementation(kotlin("test"))
+
+    //  Mockito Core and the Kotlin helper
+    testImplementation(platform("org.mockito:mockito-bom:5.2.0"))
+    testImplementation("org.mockito:mockito-core")
+    testImplementation("org.mockito.kotlin:mockito-kotlin")
+
+    // --- MockK ---
+    // For local unit tests (in src/test)
+    testImplementation("io.mockk:mockk:1.13.10")
+
 
     implementation("androidx.compose.material:material-icons-extended")
 
