@@ -13,6 +13,7 @@ data class TasksDetails(
     val status: TaskStatus = TaskStatus.PENDING,
     val categoryId: Int = 0,
     val dueDate: Long? = null,
+    val createdAt: Long = System.currentTimeMillis(),
     val isEntryValid: Boolean = false
 )
 
@@ -36,7 +37,8 @@ fun TasksDetails.toTasks(): Task = Task(
     description = description,
     status = status,
     dueDate = dueDate,
-    categoryId = categoryId
+    categoryId = categoryId,
+    createdAt = createdAt
 )
 
 
@@ -46,5 +48,6 @@ fun Task.toTaskDetails(): TasksDetails = TasksDetails(
     description = description,
     status = status,
     dueDate = dueDate,
-    categoryId = categoryId
+    categoryId = categoryId,
+    createdAt = createdAt
 )

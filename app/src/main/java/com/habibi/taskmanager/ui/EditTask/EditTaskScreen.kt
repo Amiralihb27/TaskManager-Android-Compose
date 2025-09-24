@@ -20,10 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.text.format.DateFormat
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.platform.LocalContext
 import com.habibi.taskmanager.ui.EditTask.EditTaskViewModel
 import com.habibi.taskmanager.ui.categories.CategoryDetails
+import com.habibi.taskmanager.ui.components.FilterCategoryRow
 import com.habibi.taskmanager.ui.task.TasksDetails
 import java.util.Calendar
 import java.util.TimeZone
@@ -121,7 +123,7 @@ fun EditTaskScreen(
 fun EditTaskForm(
     taskDetails: TasksDetails,
     allCategories: List<CategoryDetails>,
-    onCategoryChange: (Int) -> Unit,
+    onCategoryChange: (Int?) -> Unit,
     onTitleChange: (String) -> Unit,
     onDueDateChange: (Long?) -> Unit, // This is your existing VM function
     onSave: () -> Unit, // This is your existing VM function
@@ -325,71 +327,4 @@ fun TimePickerDialog(
     )
 }
 
-object CategoryChipColors {
-    val chipSelectedText = Color.Black
-    val chipUnselectedText = Color.White
-    val chipUnselectedBg = Color.Transparent
-    val chipUnselectedBorder = Color(0xFF757575) // Grey
-}
-
-@Composable
-fun CategoryChip(
-    text: String,
-    backgroundColor: Color,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val textColor =
-        if (isSelected) CategoryChipColors.chipSelectedText else CategoryChipColors.chipUnselectedText
-    val border =
-        if (isSelected) null else BorderStroke(1.dp, CategoryChipColors.chipUnselectedBorder)
-
-    Surface(
-        onClick = onClick,
-        modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
-        color = backgroundColor,
-        border = border
-    ) {
-        Text(
-            text = text,
-            color = textColor,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
-    }
-}
-
-@Composable
-fun FilterCategoryRow(
-    allCategories: List<CategoryDetails>,
-    selectedCategoryId: Int?,
-    onCategoryClick: (Int) -> Unit,
-    onSave: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    LazyRow(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(allCategories) { category ->
-            val isThisChipSelected = (category.categoryId == selectedCategoryId)
-            val chipBackgroundColor = if (isThisChipSelected) {
-                Color(android.graphics.Color.parseColor(category.color))
-            } else {
-                CategoryChipColors.chipUnselectedBg
-            }
-            CategoryChip(
-                text = category.name,
-                backgroundColor = chipBackgroundColor,
-                isSelected = isThisChipSelected,
-                onClick = {
-                    onCategoryClick(category.categoryId)
-                    onSave()
-                }
-            )
-
-        }
-    }
-}
 

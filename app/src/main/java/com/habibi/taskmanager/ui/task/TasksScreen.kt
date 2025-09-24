@@ -3,6 +3,7 @@ package com.habibi.taskmanager.ui.task
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material.icons.Icons
@@ -50,6 +51,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.habibi.taskmanager.ui.AppViewModelProvider
 import com.habibi.taskmanager.ui.categories.CategoryDetails
+import com.habibi.taskmanager.ui.components.CategoryChip
+import com.habibi.taskmanager.ui.components.FilterCategoryRow
 import kotlinx.coroutines.launch
 
 
@@ -92,7 +95,8 @@ fun TasksScreenContent(
         FilterCategoryRow(
             allCategories = taskUiState.categories,
             selectedCategoryId = taskUiState.selectedFilterCategoryId, // Pass the filter state
-            onCategoryClick = taskViewModel::onFilterByCategory // Pass the filter function
+            onCategoryClick = taskViewModel::onFilterByCategory, // Pass the filter function
+            showAllChip = true
         )
         if (taskUiState.filteredTaskList.isEmpty()) {
             EmptyTasks(modifier = modifier.fillMaxSize())
@@ -256,78 +260,10 @@ private fun CategoriesRow(
 }
 
 object CategoryChipColors {
-    val chipSelectedText = Color.Black
-    val chipUnselectedText = Color.White
     val chipUnselectedBg = Color.Transparent
     val chipUnselectedBorder = Color(0xFF757575) // Grey
 }
 
-@Composable
-fun CategoryChip(
-    text: String,
-    backgroundColor: Color,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val textColor =
-        if (isSelected) CategoryChipColors.chipSelectedText else CategoryChipColors.chipUnselectedText
-    val border =
-        if (isSelected) null else BorderStroke(1.dp, CategoryChipColors.chipUnselectedBorder)
-
-    Surface(
-        onClick = onClick,
-        modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
-        color = backgroundColor,
-        border = border
-    ) {
-        Text(
-            text = text,
-            color = textColor,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
-    }
-}
-
-@Composable
-fun FilterCategoryRow(
-    allCategories: List<CategoryDetails>,
-    selectedCategoryId: Int?,
-    onCategoryClick: (Int?) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    LazyRow(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item {
-            val isAllSelected = (selectedCategoryId == null)
-            CategoryChip(
-                text = "All",
-                backgroundColor = if (isAllSelected) MaterialTheme.colorScheme.primary else CategoryChipColors.chipUnselectedBg,
-                isSelected = isAllSelected,
-                onClick = { onCategoryClick(null) } // pass null for all categories
-            )
-        }
-
-        items(allCategories) { category ->
-            val isThisChipSelected = (category.categoryId == selectedCategoryId)
-            val chipBackgroundColor = if (isThisChipSelected) {
-                Color(android.graphics.Color.parseColor(category.color))
-            } else {
-                CategoryChipColors.chipUnselectedBg
-            }
-            CategoryChip(
-                text = category.name,
-                backgroundColor = chipBackgroundColor,
-                isSelected = isThisChipSelected,
-                onClick = { onCategoryClick(category.categoryId) }
-            )
-
-        }
-    }
-}
 
 @Composable
 fun TaskCard(
@@ -346,7 +282,7 @@ fun TaskCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
 
     ) {
         Row(

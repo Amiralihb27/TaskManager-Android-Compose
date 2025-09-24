@@ -96,17 +96,20 @@ class EditTaskViewModel(
 //        }
 //    }
 
-    fun onCategoryChange(newCategoryId: Int) {
-        _uiState.update { currentState ->
-            val updatedTaskDetails = currentState.taskDetails?.copy(
-                categoryId = newCategoryId
-            )
-            currentState.copy(
-                taskDetails = updatedTaskDetails?.copy(
-                    isEntryValid = validateInput(updatedTaskDetails)
+    fun onCategoryChange(newCategoryId: Int?) {
+        newCategoryId?.let {
+            _uiState.update { currentState ->
+                val updatedTaskDetails = currentState.taskDetails?.copy(
+                    categoryId = newCategoryId
                 )
-            )
+                currentState.copy(
+                    taskDetails = updatedTaskDetails?.copy(
+                        isEntryValid = validateInput(updatedTaskDetails)
+                    )
+                )
+            }
         }
+
     }
 
     fun onDueDateChange(newDueDateMillis: Long?) { // <-- Accepts a Long?
