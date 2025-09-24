@@ -19,7 +19,7 @@ import com.habibi.taskmanager.ui.categories.CategoryDetails
 
 
 object CategoryChipColors {
-    val chipUnselectedBg = androidx.compose.ui.graphics.Color.Transparent
+    val chipUnselectedBg = Color.Transparent
     val chipUnselectedBorder = Color(0xFF757575) // Grey
 }
 

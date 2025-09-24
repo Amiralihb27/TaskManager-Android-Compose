@@ -52,6 +52,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.habibi.taskmanager.ui.AppViewModelProvider
 import com.habibi.taskmanager.ui.categories.CategoryDetails
 import com.habibi.taskmanager.ui.components.CategoryChip
+import com.habibi.taskmanager.ui.components.CategoryChipColors
 import com.habibi.taskmanager.ui.components.FilterCategoryRow
 import kotlinx.coroutines.launch
 
@@ -259,10 +260,6 @@ private fun CategoriesRow(
     }
 }
 
-object CategoryChipColors {
-    val chipUnselectedBg = Color.Transparent
-    val chipUnselectedBorder = Color(0xFF757575) // Grey
-}
 
 
 @Composable
