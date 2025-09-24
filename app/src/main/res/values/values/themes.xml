@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.TaskManagerAndroidApp" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <!-- Make the navigation bar transparent (bottom of the screen) -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+
+    </style>
+
+</resources>

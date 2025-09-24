@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="app_name">Task Manager</string>
+    <!-- Bottom Navigation Bar Titles -->
+    <string name="bottom_nav_tasks">Tasks</string>
+    <string name="bottom_nav_search">Search</string>
+    <string name="bottom_nav_categories">Categories</string>
+    <string name="bottom_nav_more">More</string>
+</resources>
