@@ -112,11 +112,11 @@ class EditTaskViewModel(
 
     }
 
-    fun onDueDateChange(newDueDateMillis: Long?) { // <-- Accepts a Long?
+    fun onDueDateChange(newDueDateMillis: Long?) {
         _uiState.update { currentState ->
             currentState.copy(
                 taskDetails = currentState.taskDetails?.copy(
-                    dueDate = newDueDateMillis // <-- Update with the Long?
+                    dueDate = newDueDateMillis
                 )
             )
         }
