@@ -116,7 +116,8 @@ class EditTaskViewModel(
         _uiState.update { currentState ->
             currentState.copy(
                 taskDetails = currentState.taskDetails?.copy(
-                    dueDate = newDueDateMillis
+                    dueDate = newDueDateMillis,
+                    isEntryValid = true
                 )
             )
         }

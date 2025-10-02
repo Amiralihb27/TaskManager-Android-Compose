@@ -130,12 +130,11 @@ fun EditTaskForm(
     onDescriptionChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current // Needed for the classic dialog
+    val context = LocalContext.current
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
     var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
 
-    // Use the safe, backward-compatible Android DateFormat class for display
     val formattedDateString = taskDetails.dueDate?.let { millis ->
         DateFormat.format("d MMMM yyyy HH:mm", Date(millis)).toString()
     } ?: "Set due date"
