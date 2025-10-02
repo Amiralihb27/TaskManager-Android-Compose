@@ -18,14 +18,16 @@ object AppViewModelProvider {
         initializer {
             TasksViewModel(
                 this.taskManagerApplication().container.tasksRepository,
-                this.taskManagerApplication().container.categoriesRepository
+                this.taskManagerApplication().container.categoriesRepository,
+                this.taskManagerApplication().alarmScheduler
             )
         }
 
         initializer {
             EditTaskViewModel(
                 this.taskManagerApplication().container.tasksRepository,
-                this.taskManagerApplication().container.categoriesRepository
+                this.taskManagerApplication().container.categoriesRepository,
+                this.taskManagerApplication().alarmScheduler
             )
         }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.habibi.taskmanager.data.entities.TaskStatus
 import com.habibi.taskmanager.data.repository.CategoriesRepository
 import com.habibi.taskmanager.data.repository.TasksRepository
+import com.habibi.taskmanager.notifications.scheduler.AndroidAlarmScheduler
 import com.habibi.taskmanager.ui.categories.toCategoryDetails
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class TasksViewModel(
     private val tasksRepository: TasksRepository,
-    private val categoriesRepository: CategoriesRepository
+    private val categoriesRepository: CategoriesRepository,
+    private val alarmScheduler: AndroidAlarmScheduler
 ) : ViewModel() {
 
     private val _uiState =
@@ -107,7 +109,7 @@ class TasksViewModel(
         viewModelScope.launch {
             val updatedTask = task.copy(status = TaskStatus.DONE)
             tasksRepository.updateTask(updatedTask.toTasks())
-
+             alarmScheduler.cancel(updatedTask)
         }
     }
     fun onPendingTask(task: TasksDetails){

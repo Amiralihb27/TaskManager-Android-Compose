@@ -60,13 +60,13 @@ fun TaskManagerApp() {
                                 )
                             )
                         },
-                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                            // This sets the background color of the bar
-                            containerColor = MaterialTheme.colorScheme.surface,
-
-                            // This sets the color of the title text
-                            titleContentColor = MaterialTheme.colorScheme.onSurface
-                        )
+//                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+//                            // This sets the background color of the bar
+//                            containerColor = MaterialTheme.colorScheme.surface,
+//
+//                            // This sets the color of the title text
+//                            titleContentColor = MaterialTheme.colorScheme.onSurface
+//                        )
                     )
                 }
             }
