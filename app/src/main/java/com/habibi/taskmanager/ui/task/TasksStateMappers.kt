@@ -4,6 +4,10 @@ package com.habibi.taskmanager.ui.task
 import com.habibi.taskmanager.data.entities.Task
 import com.habibi.taskmanager.data.entities.TaskStatus
 import com.habibi.taskmanager.ui.categories.CategoryDetails
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 
 data class TasksDetails(
@@ -15,7 +19,32 @@ data class TasksDetails(
     val dueDate: Long? = null,
     val createdAt: Long = System.currentTimeMillis(),
     val isEntryValid: Boolean = false
-)
+) {
+    val timeReminder: String
+        get() {
+            val selectedMillis = dueDate ?: return ""
+            val now = Calendar.getInstance()
+            val givenTime = Calendar.getInstance().apply { timeInMillis = selectedMillis }
+            val diffMillis = givenTime.timeInMillis - now.timeInMillis
+
+            val sameYear = now.get(Calendar.YEAR) == givenTime.get(Calendar.YEAR)
+            val sameDay =
+                sameYear && now.get(Calendar.DAY_OF_YEAR) == givenTime.get(Calendar.DAY_OF_YEAR)
+            val timeFormat = SimpleDateFormat("yyyy-MM-dd , HH:mm", Locale.getDefault())
+            if (sameDay) {
+                val hours = TimeUnit.MILLISECONDS.toHours(diffMillis)
+                val minuts = TimeUnit.MILLISECONDS.toMinutes(diffMillis) % 60
+                val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                val formattedTime = timeFormat.format(givenTime.time)
+                return "$hours hours $minuts minutes , $formattedTime"
+            } else if (sameYear) {
+                val timeFormat = SimpleDateFormat("d MMM, HH:mm", Locale.getDefault())
+                return "${timeFormat.format(givenTime.time)}"
+            } else {
+                return "${timeFormat.format(givenTime.time)}"
+            }
+        }
+}
 
 data class TasksScreenUiState(
     val tasksList: List<TasksDetails> = emptyList(),

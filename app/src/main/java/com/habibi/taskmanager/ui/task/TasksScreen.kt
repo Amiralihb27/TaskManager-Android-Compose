@@ -46,6 +46,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -162,6 +166,7 @@ fun ShowTasks(
             //snack bar
             TaskCard(
                 task.title,
+                task.timeReminder,
                 categoryColor,
                 isSelected = false,
                 onCardClick = { navigateToTaskUpdate(task.taskId) },
@@ -169,7 +174,7 @@ fun ShowTasks(
                     taskViewModel.onDoneTask(task)
                     coroutineScope.launch {
                         val result = snackbarHostState.showSnackbar(
-                            message = "task deleted",
+                            message = "task completed",
                             actionLabel = "Undo",
                             duration = SnackbarDuration.Short
                         )
@@ -261,10 +266,10 @@ private fun CategoriesRow(
 }
 
 
-
 @Composable
 fun TaskCard(
     taskTitle: String,
+    timeReminderTitle: String,
     color: Color,
     isSelected: Boolean,
     onCardClick: () -> Unit,
@@ -299,13 +304,24 @@ fun TaskCard(
                 onClick = onRadioBtnClick,
                 modifier = Modifier.padding(start = 12.dp, end = 6.dp)
             )
-            Text(
-                text = taskTitle,
-                fontSize = 16.sp,
-                modifier = Modifier
-                    .weight(1f)
 
+            Text(
+                buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append("${taskTitle} \n")
+                    }
+                    withStyle(style = SpanStyle(fontSize = 12.sp)) {
+                        append("${timeReminderTitle}")
+                    }
+                }
             )
+
+
         }
     }
 }
