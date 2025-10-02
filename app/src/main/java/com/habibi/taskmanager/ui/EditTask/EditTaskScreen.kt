@@ -254,7 +254,7 @@ fun EditTaskForm(
         TimePickerDialog(
             onDismiss = { showTimePicker = false },
             onConfirm = {
-                val finalCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+                val finalCalendar = Calendar.getInstance().apply {
                     timeInMillis = selectedDateMillis!!
                     set(Calendar.HOUR_OF_DAY, timePickerState.hour)
                     set(Calendar.MINUTE, timePickerState.minute)
