@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.habibi.taskmanager.data.entities.currentTimestamp
 import com.habibi.taskmanager.data.repository.CategoriesRepository
 import com.habibi.taskmanager.data.repository.TasksRepository
+import com.habibi.taskmanager.notifications.scheduler.AndroidAlarmScheduler
 import com.habibi.taskmanager.ui.categories.toCategoryDetails
 import com.habibi.taskmanager.ui.task.TasksDetails
 import com.habibi.taskmanager.ui.task.toTaskDetails
@@ -23,7 +24,8 @@ import java.time.LocalDateTime
 
 class EditTaskViewModel(
     private val tasksRepository: TasksRepository,
-    private val categoriesRepository: CategoriesRepository
+    private val categoriesRepository: CategoriesRepository,
+    private val alarmScheduler: AndroidAlarmScheduler
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(EditTaskUiState());
@@ -120,6 +122,14 @@ class EditTaskViewModel(
                     isEntryValid = true
                 )
             )
+        }
+        viewModelScope.launch {
+            val selectedTask = _uiState.value.taskDetails
+            if (selectedTask != null && selectedTask.isEntryValid) {
+                if (selectedTask.dueDate != null) {
+                    alarmScheduler.schedule(selectedTask)
+                }
+            }
         }
     }
 
