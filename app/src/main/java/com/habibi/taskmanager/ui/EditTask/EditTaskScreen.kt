@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Description
@@ -38,19 +39,12 @@ fun EditTaskScreen(
     viewModel: EditTaskViewModel,
     taskId: Int
 ) {
-    // Load the task when the screen is first shown
     LaunchedEffect(key1 = taskId) {
         viewModel.loadTask(taskId)
     }
 
     val uiState by viewModel.uiState.collectAsState()
-
-//      un comment the section below if you are using save button
-//    LaunchedEffect(key1 = uiState.isTaskSaved) {
-//        if (uiState.isTaskSaved) {
-//            navigateBack()
-//        }
-//    }
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -67,6 +61,7 @@ fun EditTaskScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+                    // Back button
                     IconButton(onClick = navigateBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -75,14 +70,15 @@ fun EditTaskScreen(
                         )
                     }
 
-                    //textbutton for save changes
-
-//                    TextButton(onClick = { viewModel.saveTask() }) {
-//                        Text(
-//                            text = "Save",
-//                            color = MaterialTheme.colorScheme.onSurface
-//                        )
-//                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        // 🗑️ Delete icon
+                        IconButton(onClick = { showDeleteDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "Delete Task",
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -114,6 +110,30 @@ fun EditTaskScreen(
                 }
             }
         }
+
+        // Delete confirmation dialog
+        if (showDeleteDialog) {
+            AlertDialog(
+                onDismissRequest = { showDeleteDialog = false },
+                title = { Text("Delete Task") },
+                text = { Text("Are you sure you want to delete this task? This action cannot be undone.") },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.deleteTask(onDeleted = navigateBack)
+                            showDeleteDialog = false
+                        }
+                    ) {
+                        Text("Yes", color = MaterialTheme.colorScheme.error)
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDeleteDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -125,8 +145,8 @@ fun EditTaskForm(
     allCategories: List<CategoryDetails>,
     onCategoryChange: (Int?) -> Unit,
     onTitleChange: (String) -> Unit,
-    onDueDateChange: (Long?) -> Unit, // This is your existing VM function
-    onSave: () -> Unit, // This is your existing VM function
+    onDueDateChange: (Long?) -> Unit,
+    onSave: () -> Unit,
     onDescriptionChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {

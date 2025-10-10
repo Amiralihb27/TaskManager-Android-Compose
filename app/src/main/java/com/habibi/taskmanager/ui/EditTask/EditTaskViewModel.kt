@@ -143,5 +143,16 @@ class EditTaskViewModel(
         }
 
     }
+    fun deleteTask(onDeleted: () -> Unit = {}) {
+        viewModelScope.launch {
+            val task = _uiState.value.taskDetails
+            if (task != null) {
+                tasksRepository.deleteTask(task.toTasks())
+                alarmScheduler.cancel(task) // Cancel any scheduled alarm
+                onDeleted()
+            }
+        }
+    }
+
 }
 
