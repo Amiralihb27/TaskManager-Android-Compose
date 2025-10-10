@@ -33,10 +33,16 @@ data class TasksDetails(
             val timeFormat = SimpleDateFormat("yyyy-MM-dd , HH:mm", Locale.getDefault())
             if (sameDay) {
                 val hours = TimeUnit.MILLISECONDS.toHours(diffMillis)
-                val minuts = TimeUnit.MILLISECONDS.toMinutes(diffMillis) % 60
+                val hourValue = Math.abs(hours)
+                val suffix = if (diffMillis < 0) "ago" else "from now"
+
+                val minutes = TimeUnit.MILLISECONDS.toMinutes(diffMillis) % 60
+                val minutesValue = Math.abs(minutes)
                 val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
                 val formattedTime = timeFormat.format(givenTime.time)
-                return "$hours hours $minuts minutes , $formattedTime"
+
+
+                return "$hourValue hours $minutesValue minutes $suffix, $formattedTime"
             } else if (sameYear) {
                 val timeFormat = SimpleDateFormat("d MMM, HH:mm", Locale.getDefault())
                 return "${timeFormat.format(givenTime.time)}"

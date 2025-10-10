@@ -57,6 +57,7 @@ import com.habibi.taskmanager.ui.AppViewModelProvider
 import com.habibi.taskmanager.ui.categories.CategoryDetails
 import com.habibi.taskmanager.ui.components.CategoryChip
 import com.habibi.taskmanager.ui.components.CategoryChipColors
+import com.habibi.taskmanager.ui.components.DueDatePickerSection
 import com.habibi.taskmanager.ui.components.FilterCategoryRow
 import kotlinx.coroutines.launch
 
@@ -220,6 +221,11 @@ fun TasksEditBottomSheet(
                 isError = !tasksDetails.isEntryValid && tasksDetails.title.isNotEmpty(),
             )
             CategoriesRow(allCategories, tasksDetails, onDetailsChange)
+            DueDatePickerSection(
+                dueDate = tasksDetails.dueDate,
+                onDueDateChange = { onDetailsChange(tasksDetails.copy(dueDate = it)) }
+            )
+
             Button(
                 onClick = onSave,
                 enabled = tasksDetails.isEntryValid,

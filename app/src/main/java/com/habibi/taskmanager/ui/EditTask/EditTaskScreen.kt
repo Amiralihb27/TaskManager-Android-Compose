@@ -1,7 +1,6 @@
 package com.habibi.taskmanager.ui.EditTask
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.platform.LocalContext
 import com.habibi.taskmanager.ui.EditTask.EditTaskViewModel
 import com.habibi.taskmanager.ui.categories.CategoryDetails
+import com.habibi.taskmanager.ui.components.DueDatePickerSection
 import com.habibi.taskmanager.ui.components.FilterCategoryRow
 import com.habibi.taskmanager.ui.task.TasksDetails
 import java.util.Calendar
@@ -199,131 +199,24 @@ fun EditTaskForm(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp),
+                .padding(vertical = 0.dp),
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.Transparent,
                 focusedContainerColor = Color.Transparent,
             )
         )
-        Spacer(modifier = Modifier.height(24.dp))
-        Divider()
-
         // --- Alarm Section ---
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp)
-                .clickable { showDatePicker = true }
-        ) {
-            Icon(Icons.Default.Schedule, contentDescription = "Due Date")
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = formattedDateString,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-        Divider()
-    }
-
-    if (showDatePicker) {
-        DatePickerModal(
-            initialSelectedDateMillis = taskDetails.dueDate,
-            onDateSelected = { dateInMillis ->
-                selectedDateMillis = dateInMillis
-                showTimePicker = true // Triggers the time picker
-            },
-            onDismiss = {
-                showDatePicker = false
-            }
-        )
-    }
-
-
-    if (showTimePicker && selectedDateMillis != null) {
-        val calendar = Calendar.getInstance()
-        taskDetails.dueDate?.let {
-            calendar.timeInMillis = it
-        }
-        val timePickerState = rememberTimePickerState(
-            initialHour = calendar.get(Calendar.HOUR_OF_DAY),
-            initialMinute = calendar.get(Calendar.MINUTE),
-            is24Hour = true,
-        )
-
-        TimePickerDialog(
-            onDismiss = { showTimePicker = false },
-            onConfirm = {
-                val finalCalendar = Calendar.getInstance().apply {
-                    timeInMillis = selectedDateMillis!!
-                    set(Calendar.HOUR_OF_DAY, timePickerState.hour)
-                    set(Calendar.MINUTE, timePickerState.minute)
-                    set(Calendar.SECOND, 0)
-                    set(Calendar.MILLISECOND, 0)
-                }
-                onDueDateChange(finalCalendar.timeInMillis)
+        DueDatePickerSection(
+            dueDate = taskDetails.dueDate,
+            onDueDateChange = {
+                onDueDateChange(it)
                 onSave()
-                showTimePicker = false
             },
-            content = {
-                TimePicker(state = timePickerState)
-            }
-
+            modifier = Modifier.padding(start = 0.dp)
         )
+
+
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePickerModal(
-    onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit,
-    initialSelectedDateMillis: Long?
-) {
-
-    val datePickerState =
-        rememberDatePickerState(initialSelectedDateMillis = initialSelectedDateMillis)
-
-    DatePickerDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = {
-                onDateSelected(datePickerState.selectedDateMillis)
-                onDismiss()
-            }) {
-                Text("OK")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    ) {
-        DatePicker(state = datePickerState)
-    }
-}
-
-@Composable
-fun TimePickerDialog(
-    onDismiss: () -> Unit,
-    onConfirm: () -> Unit,
-    content: @Composable () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        dismissButton = {
-            TextButton(onClick = { onDismiss() }) {
-                Text("Dismiss")
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = { onConfirm() }) {
-                Text("OK")
-            }
-        },
-        text = { content() }
-    )
 }
 
 
